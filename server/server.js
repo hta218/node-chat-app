@@ -31,18 +31,20 @@ io.on('connection', (socket) => {
     // console.log('createEmail', newEmail);
   });
 
-  socket.on("createMessage", (msg) => {
+  socket.on("createMessage", (msg, callback) => {
     console.log("createMessage", msg);
 
     // socket.emit : emit to single connection (the current)
     // io.emit : emit to all connections to the server (the current)
 
     io.emit('newMessage', generateMessage(msg.from, msg.text));
-    socket.broadcast.emit("newMessage", {
-      from: msg.from,
-      text: msg.text,
-      createdAt: new Date().getTime()
-    });
+    // socket.broadcast.emit("newMessage", {
+    //   from: msg.from,
+    //   text: msg.text,
+    //   createdAt: new Date().getTime()
+    // });
+
+    callback("This is from the server");
   });
 
   socket.on('disconnect', () => {

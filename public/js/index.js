@@ -10,11 +10,6 @@ socket.emit('createEmail', {
   text: "me too"
 })
 
-// socket.emit("createMessage", {
-//   to: 'server@side.com',
-//   text: "Use nodejs, it's awesome"
-// });
-
 socket.on('disconnect', () => {
   console.log("Disconnected from server");
 });
@@ -25,4 +20,18 @@ socket.on('newEmail', (email) => {
 
 socket.on("newMessage", (msg) => {
   console.log("New message", msg);
+
+  var li = $("<li></li>").text(`${msg.from}: ${msg.text}`);
+  $("#messages").append(li);
+});
+
+$("#js-message-form").on("submit", (e) => {
+  e.preventDefault();
+
+  socket.emit("createMessage", {
+    from: 'client@side.com',
+    text: $("input[name=msg]").val()
+  }, data => {
+    console.log("Got it!", data);
+  });
 });
